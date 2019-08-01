@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: babylon-homeroom
+spec:
+  selector:
+    matchLabels:
+      app: babylon-homeroom
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: babylon-homeroom
+    spec:
+      containers:
+      - name: babylon-homeroom
+        image: quay.io/panni/babylon-homeroom:v0.3
+        ports:
+        - containerPort: 8080

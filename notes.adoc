@@ -1,0 +1,31 @@
+2019-07-31:
+
+- Kubernetes Python client module v10.0.0 doesn't work properly when patching
+custom objects. See here: https://github.com/kubernetes-client/python/issues/866
+They tried to fix this https://github.com/kubernetes-client/python/issues/862
+but broke it. So the suggestion to use v9. In the `requirement.txt` I've put 
+it as `kubernetes<10.0.0`.
+
+- I tested patching custom objects with `curl` and here is the command that worked
+for me:
++
+----
+$ TOKEN=$(oc whoami -t)
+$ NAMESPACE=panni-homeroom
+$ RESOURCE_TYPE=resourceclaims
+$ RESOURCE_NAME=resource-claim-mtfz5
+$ curl -k --request PATCH --header "Authorization: Bearer $TOKEN"  --header "Content-Type: application/merge-patch+json" --data '{"spec":{"desiredState":"running"}}' https://master.dev311.openshift.opentlc.com:443/apis/gpte.redhat.com/v1/namespaces/$NAMESPACE/$RESOURCE_TYPE/$RESOURCE_NAME
+----
++
+Note the use of `application/merge-patch+json` content-type.
+I think it should work with `json-patch+json` as well, but then the patch should be an array, not an object
+(explained here: https://github.com/kubernetes/kubernetes/issues/68861)
+
+2019-08-01:
+
+- To find out current namespace use this hint from Ralph: https://github.com/kubernetes-client/python/issues/363
+
+- I created a new clusterrole and bound it to the `default` serviceaccount in my namespace.
+The role is a copy of Johnathan's `resource-claim-operator` role, but with addition of `patch` and `update` 
+for `resourceclaims`. We have to fine tune it later.
+

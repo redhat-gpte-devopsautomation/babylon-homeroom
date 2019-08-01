@@ -1,0 +1,12 @@
+apiVersion: gpte.redhat.com/v1
+kind: AnarchySubject
+metadata:
+  generateName: test-
+  namespace: panni-homeroom
+spec:
+  governor: test
+  parameters:
+    openshift_release: "4.1"
+    aws_region: us-east-1
+    repo_version: "3.11"
+    subdomain_base_suffix: .example.opentlc.com

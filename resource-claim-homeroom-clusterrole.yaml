@@ -1,0 +1,44 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRole
+metadata:
+  name: resource-claim-homeroom
+rules:
+- apiGroups:
+  - gpte.redhat.com
+  attributeRestrictions: null
+  resources:
+  - resourceclaims
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - gpte.redhat.com
+  attributeRestrictions: null
+  resources:
+  - resourceclaims/status
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  attributeRestrictions: null
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - user.openshift.io
+  attributeRestrictions: null
+  resources:
+  - identities
+  - users
+  verbs:
+  - get

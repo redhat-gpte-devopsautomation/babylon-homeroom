@@ -1,0 +1,6 @@
+== Babylon Homeroom
+
+This is a backend for `workshop-homeroom` which can start/stop/delete
+workshop environments.
+
+
