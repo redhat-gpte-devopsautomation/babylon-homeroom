@@ -1,0 +1,32 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+{% block content %}
+{{util.flashed_messages(dismissible=True)}}
+<div class="container">
+  <h1>Your lab environment</h1>
+
+  <ul class="list-group">
+          <li class="list-group-item"> <b>Name:</b> {{ cr_status['status']['resource']['metadata']['name'] }} </li>
+          <li class="list-group-item"> <b>Desired State:</b> {{ cr_status['spec']['desiredState'] }}</li>
+          <li class="list-group-item"> <b>Current State:</b> {{ cr_status['status']['resource']['status']['state'] }}</li>
+  </ul>
+
+  <h3>Manage your environment</h3>
+  {{ wtf.quick_form(form, 
+  button_map={'btn_start': 'success', 
+              'btn_stop': 'primary', 
+              'btn_delete': 'danger',
+              'btn_update': 'info'
+              }) }}
+
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
+

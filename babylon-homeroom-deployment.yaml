@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: babylon-homeroom
-        image: quay.io/panni/babylon-homeroom:v0.3
+        image: quay.io/panni/babylon-homeroom:v0.4.6
         ports:
         - containerPort: 8080

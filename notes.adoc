@@ -29,3 +29,9 @@ I think it should work with `json-patch+json` as well, but then the patch should
 The role is a copy of Johnathan's `resource-claim-operator` role, but with addition of `patch` and `update` 
 for `resourceclaims`. We have to fine tune it later.
 
+- Tested together with the `workshop-homeroom` front-end. Of course, it doesn't work with internal
+service DNS names, requires full external route. Not exactly what I wanted.
+
+- The existing `workshop-homeroom` front-end has hard-coded buttons that say "Start Workshop".
+Which means we won't be able to use it as a "generic" front-end. Better include the front-end
+code (a couple of buttons) in my back-end Flask app.
