@@ -35,3 +35,28 @@ service DNS names, requires full external route. Not exactly what I wanted.
 - The existing `workshop-homeroom` front-end has hard-coded buttons that say "Start Workshop".
 Which means we won't be able to use it as a "generic" front-end. Better include the front-end
 code (a couple of buttons) in my back-end Flask app.
+
+2019-08-04:
+
+- Combined the frond-end and Kubernetes calls into a single Flask application
+
+- Tested it locally. Then created a container image and tested it on the cluster.
+
+- 30 minutes of debugging time were spent to figure out that `index.hmtl` is not the same as 
+`index.html`. People say it's all because I use Vim. They say VS Code or Atom would figure out
+that it's a typo. Well, we'll see...
+
+- Running a set of `podman` commands (build, tag, push) and then updating the Deployment YAML with
+the new version tag over and over calls for automation. I don't think I want Jenkins here, but 
+it might be a good job for Tekton... 
+
+2019-08-07:
+
+- Fixed patch expressions to match what Anarchy is expecting
+
+- Buttons are now disabled when appropriate: e.g. Stop is disabled when the Subject is
+"idling", "idle-pending", etc.
+
+- Used `test_client` for Flask to debug forms. Very helpful. 
+https://flask.palletsprojects.com/en/1.1.x/api/#flask.Flask.test_client
+

@@ -1,4 +1,3 @@
----
 apiVersion: gpte.redhat.com/v1
 kind: ResourceClaim
 metadata:
@@ -8,12 +7,20 @@ spec:
     apiVersion: gpte.redhat.com/v1
     kind: AnarchySubject
     metadata:
-      labels:
-        governor: test
+      annotations:
+        gpte.redhat.com/resource-provider-name: anarchy-test
+        gpte.redhat.com/resource-provider-namespace: resource-claim-operator
     spec:
+      desiredState: deployed
       governor: test
       parameters:
-        test_str: bar
-        test_int: 23
-        test_float: 23.3
-  desiredState: running
+        account_id: gpte
+        aws_hosted_zone_id: Z3IHLWJZOU9SRT
+        aws_region: us-east-1
+        babylon_scm_reference: three-tier-app-prod-1.14
+        cloud_provider: ec2
+        email: babylon@example.com
+        env_type: three-tier-app
+        key_name: ocpkey
+        own_repo_path: http://admin.na.shared.opentlc.com/repos/ocp/3.6
+        subdomain_base_suffix: .example.opentlc.com

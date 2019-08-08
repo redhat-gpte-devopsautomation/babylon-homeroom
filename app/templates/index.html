@@ -10,7 +10,7 @@
 
   <ul class="list-group">
           <li class="list-group-item"> <b>Name:</b> {{ cr_status['status']['resource']['metadata']['name'] }} </li>
-          <li class="list-group-item"> <b>Desired State:</b> {{ cr_status['spec']['desiredState'] }}</li>
+          <li class="list-group-item"> <b>Desired State:</b> {{ cr_status['spec']['template']['spec']['desiredState'] }}</li>
           <li class="list-group-item"> <b>Current State:</b> {{ cr_status['status']['resource']['status']['state'] }}</li>
   </ul>
 
