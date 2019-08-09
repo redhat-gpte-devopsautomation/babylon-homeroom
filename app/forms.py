@@ -7,4 +7,7 @@ class ResourceForm(FlaskForm):
     btn_delete = SubmitField('Delete')
     btn_update = SubmitField('Info')
 
+class ConfirmDeleteForm(FlaskForm):
+    btn_confirm = SubmitField('Delete')
+    btn_cancel  = SubmitField('Cancel')
 

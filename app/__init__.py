@@ -29,8 +29,8 @@ api = client.CustomObjectsApi()
 response = api.list_namespaced_custom_object(cr_group, cr_version, cr_namespace, cr_plural)
 cr_name = response['items'][0]['metadata']['name']
 
-body_start = {"spec":{"template":{"spec":{"desiredState": "deployed"}}}}
-body_stop = {"spec":{"template":{"spec":{"desiredState": "idled"}}}}
+body_start = {"spec":{"template":{"spec":{"desiredState": "started"}}}}
+body_stop = {"spec":{"template":{"spec":{"desiredState": "stopped"}}}}
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -42,19 +42,16 @@ app.config['SECRET_KEY'] = SECRET_KEY
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
-                                                  cr_namespace, cr_plural,
-                                                  cr_name)
+                                                 cr_namespace, cr_plural,
+                                                 cr_name)
     form = ResourceForm()
-    if (cr_status['status']['resource']['status']['state'] == 'deployed' or
-        cr_status['status']['resource']['status']['state'] == 'idling' or
-        cr_status['status']['resource']['status']['state'] == 'idle-pending' or 
-        cr_status['status']['resource']['status']['state'] == 'resuming' or 
-        cr_status['status']['resource']['status']['state'] == 'resume-pending') :
+    if (cr_status['status']['resource']['status']['state'] == 'started' or
+        cr_status['status']['resource']['status']['state'] == 'start-scheduled' or
+        cr_status['status']['resource']['status']['state'] == 'starting') :
         form.btn_start.render_kw = {'disabled':''}
-    if (cr_status['status']['resource']['status']['state'] == 'idled' or
-        cr_status['status']['resource']['status']['state'] == 'idling' or
-        cr_status['status']['resource']['status']['state'] == 'resuming' or 
-        cr_status['status']['resource']['status']['state'] == 'idle-pending') :
+    if (cr_status['status']['resource']['status']['state'] == 'stopped' or
+        cr_status['status']['resource']['status']['state'] == 'stop-scheduled' or
+        cr_status['status']['resource']['status']['state'] == 'stopping') :
         form.btn_stop.render_kw = {'disabled':''}
     if request.method == 'POST':
         result = request.form
@@ -66,12 +63,12 @@ def index():
             start()
         if 'btn_update' in result.keys():
             cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
-                                                  cr_namespace, cr_plural,
-                                                  cr_name)
+                                                         cr_namespace, cr_plural,
+                                                         cr_name)
         return redirect('/index')
 
-    return render_template('index.html', form=form, 
-                               cr_status=cr_status)
+    return render_template('index.html', form=form,
+                           cr_status=cr_status)
 
 @app.route('/version')
 def version():
@@ -99,8 +96,8 @@ def stop():
             group=cr_group,
             version=cr_version,
             plural=cr_plural,
-            name=cr_name, 
-            namespace=cr_namespace, 
+            name=cr_name,
+            namespace=cr_namespace,
             body=body_stop)
     except ApiException as e:
         print("Exception when calling \
