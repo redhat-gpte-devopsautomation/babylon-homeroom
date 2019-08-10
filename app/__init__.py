@@ -54,6 +54,7 @@ def index():
         cr_status['status']['resource']['status']['state'] == 'stopping') :
         form.btn_stop.render_kw = {'disabled':''}
     if request.method == 'POST':
+        app.logger.info('Processing form!')
         result = request.form
         if 'btn_stop' in result.keys():
             form.btn_stop.render_kw = {'disabled':''}
@@ -65,6 +66,8 @@ def index():
             cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
                                                          cr_namespace, cr_plural,
                                                          cr_name)
+        for k in result.keys():
+            print(k)
         return redirect('/index')
 
     return render_template('index.html', form=form,
