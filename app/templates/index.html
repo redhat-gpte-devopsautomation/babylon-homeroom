@@ -1,5 +1,4 @@
 {% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
 {% import "bootstrap/utils.html" as util %}
 
@@ -15,13 +14,10 @@
   </ul>
 
   <h3>Manage your environment</h3>
-  {{ wtf.quick_form(form, 
-  button_map={'btn_start': 'success', 
-              'btn_stop': 'primary', 
-              'btn_delete': 'danger',
-              'btn_update': 'info'
-              }) }}
-
+<a class="btn btn-success" href="/start" role="button">Start</a>
+<a class="btn btn-primary" href="/stop" role="button">Stop</a>
+<a class="btn btn-danger"  href="#" role="button" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+<a class="btn btn-info"    href="/index" role="button">Info</a>
 </div>
 
 <!-- Modal -->
@@ -39,7 +35,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger btn-ok">Delete</button>
+        <a class="btn btn-danger" href="/delete" role="button" class="btn btn-danger btn-ok">Delete</a>
       </div>
     </div>
   </div>

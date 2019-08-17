@@ -8,9 +8,6 @@ from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms import SubmitField
-from app.forms import ResourceForm
 
 # Check if we are running inside a Pod by checking this file
 if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount/namespace"):
@@ -44,33 +41,8 @@ def index():
     cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
                                                  cr_namespace, cr_plural,
                                                  cr_name)
-    form = ResourceForm()
-    if (cr_status['status']['resource']['status']['state'] == 'started' or
-        cr_status['status']['resource']['status']['state'] == 'start-scheduled' or
-        cr_status['status']['resource']['status']['state'] == 'starting') :
-        form.btn_start.render_kw = {'disabled':''}
-    if (cr_status['status']['resource']['status']['state'] == 'stopped' or
-        cr_status['status']['resource']['status']['state'] == 'stop-scheduled' or
-        cr_status['status']['resource']['status']['state'] == 'stopping') :
-        form.btn_stop.render_kw = {'disabled':''}
-    if request.method == 'POST':
-        app.logger.info('Processing form!')
-        result = request.form
-        if 'btn_stop' in result.keys():
-            form.btn_stop.render_kw = {'disabled':''}
-            stop()
-        if 'btn_start' in result.keys():
-            form.btn_start.render_kw = {'disabled':''}
-            start()
-        if 'btn_update' in result.keys():
-            cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
-                                                         cr_namespace, cr_plural,
-                                                         cr_name)
-        for k in result.keys():
-            print(k)
-        return redirect('/index')
 
-    return render_template('index.html', form=form,
+    return render_template('index.html', 
                            cr_status=cr_status)
 
 @app.route('/version')
@@ -79,6 +51,9 @@ def version():
 
 @app.route('/start')
 def start():
+    cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
+                                                 cr_namespace, cr_plural,
+                                                 cr_name)
     try:
         response = api.patch_namespaced_custom_object(
             group=cr_group,
@@ -90,10 +65,14 @@ def start():
     except ApiException as e:
         print("Exception when calling \
               CustomObjectsApi->patch_namespaced_custom_object: %s\n" % e)
-    return "STARTED"
+    return render_template('index.html', 
+                           cr_status=cr_status)
 
 @app.route('/stop')
 def stop():
+    cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
+                                                 cr_namespace, cr_plural,
+                                                 cr_name)
     try:
         response = api.patch_namespaced_custom_object(
             group=cr_group,
@@ -105,4 +84,26 @@ def stop():
     except ApiException as e:
         print("Exception when calling \
               CustomObjectsApi->patch_namespaced_custom_object: %s\n" % e)
-    return "STOPPED"
+    return render_template('index.html', 
+                           cr_status=cr_status)
+
+@app.route('/delete')
+def delete():
+    cr_status = api.get_namespaced_custom_object(cr_group, cr_version,
+                                                 cr_namespace, cr_plural,
+                                                 cr_name)
+    body = client.V1DeleteOptions()
+    try:
+        response = api.delete_namespaced_custom_object(
+            group=cr_group,
+            version=cr_version,
+            plural=cr_plural,
+            name=cr_name,
+            namespace=cr_namespace,
+            body=body)
+    except ApiException as e:
+        print("Exception when calling \
+              CustomObjectsApi->patch_namespaced_custom_object: %s\n" % e)
+    return render_template('index.html', 
+                           cr_status=cr_status)
+
