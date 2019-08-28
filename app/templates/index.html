@@ -14,10 +14,10 @@
   </ul>
 
   <h3>Manage your environment</h3>
-<a class="btn btn-success" href="/start" role="button">Start</a>
-<a class="btn btn-primary" href="/stop" role="button">Stop</a>
-<a class="btn btn-danger"  href="#" role="button" data-toggle="modal" data-target="#confirm-delete">Delete</a>
-<a class="btn btn-info"    href="/index" role="button">Info</a>
+  <a class="{{ btn_classes['start']|join(" ") }}" href="/start" role="button">Start</a>
+<a class="{{ btn_classes['stop']|join(" ") }}" href="/stop" role="button">Stop</a>
+<a class="{{ btn_classes['delete']|join(" ") }}"  href="#" role="button" data-toggle="modal" data-target="#confirm-delete">Delete</a>
+<a class="{{ btn_classes['info']|join(" ") }}"  href="/index" role="button">Info</a>
 </div>
 
 <!-- Modal -->
