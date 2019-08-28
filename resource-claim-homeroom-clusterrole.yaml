@@ -4,7 +4,7 @@ metadata:
   name: resource-claim-homeroom
 rules:
 - apiGroups:
-  - gpte.redhat.com
+  - poolboy.gpte.redhat.com
   attributeRestrictions: null
   resources:
   - resourceclaims
@@ -15,7 +15,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - gpte.redhat.com
+  - poolboy.gpte.redhat.com
   attributeRestrictions: null
   resources:
   - resourceclaims/status

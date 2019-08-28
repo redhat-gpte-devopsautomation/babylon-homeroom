@@ -19,7 +19,7 @@ else:
     config.load_kube_config()
     cr_namespace = config.list_kube_config_contexts()[1]['context']['namespace']
 
-cr_group = 'gpte.redhat.com'
+cr_group = 'poolboy.gpte.redhat.com'
 cr_version = 'v1'
 cr_plural = 'resourceclaims'
 api = client.CustomObjectsApi()

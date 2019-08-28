@@ -1,18 +1,18 @@
+---
 apiVersion: poolboy.gpte.redhat.com/v1
 kind: ResourceClaim
 metadata:
-  generateName: resource-claim-
+  generateName: anarchy-subject-
 spec:
   template:
-    apiVersion: anarchy.gpte.redhat.com/v1
+    apiVersion: gpte.redhat.com/v1
     kind: AnarchySubject
     metadata:
       annotations:
-        gpte.redhat.com/resource-provider-name: anarchy-test
+        gpte.redhat.com/resource-provider-name: anarchy-subject
         gpte.redhat.com/resource-provider-namespace: poolboy
+      namespace: anarchy-operator
     spec:
-      desiredState: started
-      governor: test
       parameters:
         account_id: gpte
         aws_hosted_zone_id: Z3IHLWJZOU9SRT
