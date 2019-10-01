@@ -10,4 +10,4 @@ podman tag babylon-homeroom:${NEXT_VERSION} quay.io/panni/babylon-homeroom:lates
 podman push quay.io/panni/babylon-homeroom:${NEXT_VERSION}
 podman push quay.io/panni/babylon-homeroom:latest
 oc set image deployment babylon-homeroom babylon-homeroom=quay.io/panni/babylon-homeroom:${NEXT_VERSION}
-oc get --export deploy babylon-homeroom -o yaml > babylon-homeroom-deployment-export.yaml
+oc get --export deploy babylon-homeroom -o yaml > files/babylon-homeroom-deployment-export.yaml

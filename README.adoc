@@ -1,6 +1,35 @@
-== Babylon Homeroom
+= Babylon Homeroom
 
-This is a backend for `workshop-homeroom` which can start/stop/delete
-workshop environments.
+This is a simple pod to provide front-end to the Poolboy operator
+(https://github.com/redhat-gpte-devopsautomation/poolboy) which is a part of Babylon project. 
+It provides a simple Flask-based GUI and then changes the `desiredState` parameter of `ResourceClaim` object.
+The Anarchy operator (https://github.com/redhat-gpte-devopsautomation/anarchy-operator) reacts to that 
+by starting or stopping the actual Resource.
 
+== Expected Workflow
 
+* User creates a ResourceClaim in its own namespace
+* The ResourceClaim is matched to a ResourceProvider
+* The ResourceClaim has the `desiredState` parameter set to `started` by default
+* The Anarchy Operator orchestrates creation of required resources 
+(using ResourceHandles, ResourcePools, and the Poolboy operator)
+* The `babylon-homeroom` Pod is started in the same namespace with the ResourceClaim
+* When the user clicks buttons "Stop" or "Start" it changes the `desiredState` in the ResourceClaim
+template
+* The Poolboy operator then starts the process of stopping or starting the requested Resource
+* Pressing the "Delete" button deletes the ResourceClaim which triggers deletion of all related Resources
+
+== Building the Image
+
+Use `podman build -t babylon-homeroom:${NEXT_VERSION} .` from the project's root directory.
+
+== Deploying the Image
+
+Use `files/babylon-homeroom-deployment.yaml` and `files/babylon-homeroom-service.yaml` to deploy
+the Pod on OpenShift. Expose the service to get its external Route.
+
+== Testing the Pod
+
+Use `files/resource-claim.yaml` to create a ResourceClaim object in the namespace where you are running the
+Pod. Use the external Route to access the Pod. Try pressing "Stop" and "Start" buttons to manage your 
+ResourceClaim. Watch its status changing either by using the `oc` command or by pressing the "Info" button.
