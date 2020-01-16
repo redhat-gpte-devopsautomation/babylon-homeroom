@@ -1,0 +1,64 @@
+apiVersion: poolboy.gpte.redhat.com/v1
+kind: ResourceClaim
+metadata:
+  annotations:
+    poolboy.gpte.redhat.com/resource-claim-init-timestamp: "2019-10-07T20:25:24Z"
+  creationTimestamp: "2019-10-07T20:25:24Z"
+  generation: 2
+  name: lab-babylon-operators-2
+  namespace: homeroom-test-1
+  resourceVersion: "14362584"
+  selfLink: /apis/poolboy.gpte.redhat.com/v1/namespaces/homeroom-test-1/resourceclaims/lab-babylon-operators
+  uid: 97e2c8b5-e940-11e9-ace1-0afd0edaacda
+spec:
+  resources:
+  - provider:
+      apiVersion: poolboy.gpte.redhat.com/v1
+      kind: ResourceProvider
+      name: anarchy-test
+      namespace: poolboy
+    template:
+      apiVersion: anarchy.gpte.redhat.com/v1
+      kind: AnarchySubject
+      metadata:
+        annotations:
+          babylon.gpte.redhat.com/description: Test AnarchySubject which integrates
+            to the test backend to simulate Babylon.
+          babylon.gpte.redhat.com/name: anarchy-test
+          poolboy.gpte.redhat.com/resource-provider-name: anarchy-test
+          poolboy.gpte.redhat.com/resource-provider-namespace: poolboy
+        generateName: lab-babylon-operators-
+      spec:
+        desiredState: started
+        governor: test
+        parameters:
+          aws_hosted_zone_id: Z3IHLWJZOU9SRT
+          aws_region: us-east-1
+          babylon_organization: gpte
+          babylon_scm_reference: three-tier-app-prod-1.14
+          cloud_provider: ec2
+          email: babylon@example.com
+          env_type: three-tier-app
+          key_name: ocpkey
+          own_repo_path: http://admin.na.shared.opentlc.com/repos/ocp/3.6
+          subdomain_base_suffix: .example.opentlc.com
+  - provider:
+      apiVersion: poolboy.gpte.redhat.com/v1
+      kind: ResourceProvider
+      name: anarchy-lab-env-configmap
+      namespace: poolboy
+    template:
+      apiVersion: v1
+      data:
+        gateway.sh: ""
+        terminal.sh: |
+          GUID={{: resource_handle.metadata.name[-5:] :}}
+          export GUID
+        workshop.sh: |
+          GUID={{: resource_handle.metadata.name[-5:] :}}
+          export GUID
+      kind: ConfigMap
+      metadata:
+        annotations:
+          poolboy.gpte.redhat.com/resource-provider-name: anarchy-lab-env-configmap
+        name: lab-babylon-operators-env
